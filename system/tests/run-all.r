@@ -22,6 +22,16 @@ qt/script-header: "Red/System []"
 ;; make auto files if needed
 do %source/units/make-red-system-auto-tests.r
 
+;; make -test.reds file lib-test
+
+do %make-reds-test-list.r
+
+print "something 1"
+;; read all-reds-tests.txt
+
+reds-tests: read/lines %all-reds-tests.txt
+
+print "something 2"
 ;; run the tests
 print rejoin ["Run-All    v" system/script/header/version]
 print rejoin ["Quick-Test v" qt/version]
@@ -54,70 +64,15 @@ start-time: now/precise
   --run-script-quiet %source/compiler/compiles-ok-test.r
   --run-script-quiet %source/compiler/dylib-test.r
   ;--run-test-file-quiet %source/compiler/define-test.reds
-
 ===end-group===
 
-===start-group=== "Datatype tests"
-  --run-test-file-quiet %source/units/logic-test.reds       
-  --run-test-file-quiet %source/units/byte-test.reds
-  --run-test-file-quiet %source/units/c-string-test.reds
-  --run-test-file-quiet %source/units/struct-test.reds
-  --run-test-file-quiet %source/units/pointer-test.reds
-  --run-test-file-quiet %source/units/cast-test.reds
-  --run-test-file-quiet %source/units/alias-test.reds
-  --run-test-file-quiet %source/units/length-test.reds
-  --run-test-file-quiet %source/units/null-test.reds
-  --run-test-file-quiet %source/units/enum-test.reds
-  --run-test-file-quiet %source/units/float-test.reds
-  --run-test-file-quiet %source/units/float32-test.reds
-  --run-test-file-quiet %source/units/lib-test.reds
-  --run-test-file-quiet %source/units/get-pointer-test.reds
-  --run-test-file-quiet %source/units/float-pointer-test.reds
-===end-group===
-
-===start-group=== "Context tests"
-  --run-test-file-quiet %source/units/namespace-test.reds
-===end-group===
-
-===start-group=== "Native functions tests"
-  --run-test-file-quiet %source/units/not-test.reds
-  --run-test-file-quiet %source/units/size-test.reds
-  --run-test-file-quiet %source/units/function-test.reds
-  --run-test-file-quiet %source/units/case-test.reds
-  --run-test-file-quiet %source/units/switch-test.reds
-===end-group===
-
-===start-group=== "Special natives tests"
-  --run-test-file-quiet %source/units/exit-test.reds
-  --run-test-file-quiet %source/units/return-test.reds
-===end-group===
-
-===start-group=== "Math operators tests"
-  --run-test-file-quiet %source/units/modulo-test.reds
-  --run-test-file-quiet %source/units/math-mixed-test.reds
-===end-group===
-
-===start-group=== "Infix syntax for functions"
-  --run-test-file-quiet %source/units/infix-test.reds
-===end-group===
-
-===start-group=== "Conditional tests"
-  --run-test-file-quiet %source/units/conditional-test.reds
-===end-group===
-
-===start-group=== "Runtime tests"
-  --run-test-file-quiet %source/runtime/common-test.reds
-===end-group===
-
-===start-group=== "Auto-tests"
-  --run-test-file-quiet %source/units/auto-tests/byte-auto-test.reds
-  --run-test-file-quiet %source/units/auto-tests/integer-auto-test.reds
-  --run-test-file-quiet %source/units/auto-tests/maths-auto-test.reds
-  --run-test-file-quiet %source/units/auto-tests/float-auto-test.reds
-  --run-test-file-quiet %source/units/auto-tests/float32-auto-test.reds
-  --run-test-file-quiet %source/units/auto-tests/dylib-auto-test.reds
-
-===end-group===
+foreach test all-reds-tests [
+  do compose [
+    ===start-group=== (test)
+      --run-script-quiet (to-file test)
+    ===end-group===
+  ]
+]
 
 ***end-run-quiet***
 
